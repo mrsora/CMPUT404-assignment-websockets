@@ -45,14 +45,14 @@
         function drawCircle(context, entity) {
             with (context) {
                 beginPath();
-                lineWidth = 3;
+                lineWidth = 10;
                 var x = entity["x"];
                 var y = entity["y"];
                 //moveTo(x,y);
                 fillStyle = entity["colour"];
                 strokeStyle = fillStyle;
                 arc(x, y, (entity["radius"]) ? entity["radius"] : 50, 0, 2.0 * Math.PI, false);
-                stroke();
+                fill();
             }
         }
 
@@ -61,7 +61,7 @@
                 entity["colour"] = "#FF0000";
             }
             if (!entity["radius"]) {
-                entity["radius"] = 50;
+                entity["radius"] = 25;
             }
             return entity;
         }
@@ -69,7 +69,10 @@
         function clearFrame() {
             with (context) {
                 moveTo(0, 0);
-                fillStyle = "#000";
+                var gradient = createLinearGradient(0,0,W,H);
+                gradient.addColorStop(0, '#F9B5AC')
+                gradient.addColorStop(0.9, '#75B9BE')
+                fillStyle = gradient;
                 fillRect(0, 0, W, H);
             }
 
@@ -231,19 +234,31 @@
         // Add the application specific mouse listeners!
         //XXX: TODO Make these prettier!
         mouse.mousedowners.push(function (x, y, clicked, e) {
-            addEntityWithoutName({ 'x': x, 'y': y, 'colour': 'blue' });
+            addEntityWithoutName({ 'x': x, 'y': y, 'colour': '#cf0053' });
         });
 
         mouse.mouseuppers.push(function (x, y, clicked, e) {
-            addEntityWithoutName({ 'x': x, 'y': y, 'colour': 'red' });
+            addEntityWithoutName({ 'x': x, 'y': y, 'colour': '#ff408c' });
         });
 
         mouse.mousedraggers.push(function (x, y, clicked, e) {
             addEntityWithoutName({
-                'x': x, 'y': y, 'colour': 'green',
+                'x': x, 'y': y, 'colour': getRandomColor(),
+                // 'x': x, 'y': y, 'colour': '#ffa781',
                 'radius': 10
             });
         });
+
+        // https://stackoverflow.com/questions/1484506/random-color-generator
+        function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
 
 
         function update() {
